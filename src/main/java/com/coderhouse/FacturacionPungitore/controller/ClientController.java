@@ -21,10 +21,10 @@ public class ClientController {
     @PostMapping
     public ResponseEntity<Object> crearCliente(@RequestBody Client client) {
         try {
-            Client clienteGuardado = clientService.crearCliente(client);
+            Client clienteGuardado = clientService.guardarCliente(client);
             return ResponseHandler.generateResponse("Cliente creado correctamente", HttpStatus.CREATED, clienteGuardado);
         } catch (Exception e) {
-            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
         }
     }
 
@@ -36,10 +36,36 @@ public class ClientController {
             if (clienteObtenido.isPresent()) {
                 return ResponseHandler.generateResponse("Cliente encontrado correctamente", HttpStatus.OK, clienteObtenido);
             } else {
-                return ResponseHandler.generateResponse("Cliente con id "+ id + " inexsistente.", HttpStatus.NOT_FOUND, null);
+                return ResponseHandler.generateResponse("Cliente con id "+ id + " inexsistente.", HttpStatus.OK, null);
             }
         } catch (Exception e) {
             return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, null);
+        }
+    }
+
+    @PutMapping(path = "{id}")
+    public ResponseEntity<Object> actualizarCliente(@PathVariable int id, @RequestBody Client client) {
+        try {
+            client.setId(id);
+            Client clienteActualizado = clientService.actualizarCliente(client);
+            return ResponseHandler.generateResponse("Cliente actualizado correctamente", HttpStatus.OK, clienteActualizado);
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
+        }
+    }
+
+    @DeleteMapping(path = "{id}")
+    public ResponseEntity<Object> eliminarCliente(@PathVariable int id) {
+        try {
+            Optional<Client> clienteObtenido = clientService.obtenerCliente(id);
+            if (clienteObtenido.isPresent()) {
+                clientService.eliminarCliente(clienteObtenido.get());
+                return ResponseHandler.generateResponse("Cliente con id " + id + " eliminado correctamente", HttpStatus.OK, clienteObtenido);
+            } else {
+                return ResponseHandler.generateResponse("Cliente con id "+ id + " inexsistente.", HttpStatus.OK, null);
+            }
+        } catch (Exception e) {
+            return ResponseHandler.generateResponse(e.getMessage(), HttpStatus.BAD_REQUEST, null);
         }
     }
 

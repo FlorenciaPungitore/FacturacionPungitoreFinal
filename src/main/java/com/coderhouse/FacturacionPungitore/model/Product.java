@@ -10,10 +10,11 @@ public class Product {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private int id;
+    private String title;
     private String description;
     private String code;
-    private double price;
-    private int stock;
+    private Double price;
+    private Integer stock;
 
     //Getters y setters y override de toString
     public int getId() {
@@ -40,26 +41,35 @@ public class Product {
         this.code = code;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public int getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(int stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override
     public String toString() {
-        return "Producto{" +
+        return "Product{" +
                 "id=" + id +
+                ", titulo='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", code='" + code + '\'' +
                 ", price=" + price +
